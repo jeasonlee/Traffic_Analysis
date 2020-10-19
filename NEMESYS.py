@@ -16,11 +16,6 @@ def calculate(a, b):
     byte_a = a2b(a)
     byte_b = a2b(b)
 
-    # print(byte_a)
-    # print(len(byte_a))
-    # print(byte_b)
-    # print(len(byte_b))
-
     same_num = 0
     for i in range(0, 8):
         if byte_a[i] == byte_b[i]:
@@ -43,7 +38,7 @@ while 1:
             ip = eth.data
             tcp = ip.data
             data = tcp.data
-            print(data)
+            # print(data)
 
             BC = []
             for j in range(0, len(data)-1):
@@ -77,9 +72,7 @@ while 1:
             #         vote[j] += 3
 
             print(data)
-            print(len(data))
             print(vote)
-            print(len(vote))
 
 
     except:
