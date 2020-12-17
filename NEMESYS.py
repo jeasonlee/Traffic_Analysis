@@ -1,4 +1,5 @@
 import dpkt
+import os
 from math import log
 
 def calculate(a, b):
@@ -22,15 +23,13 @@ def calculate(a, b):
             same_num += 1
         else:
             continue
-
     return same_num/8
 
 datapath = './data_smtp/'
-
-i = 1
-while 1:
+file_name_list = os.listdir(datapath)
+for file_name in file_name_list:
     try:
-        f = open(datapath + str(i) + '.pcap', 'rb')
+        f = open(os.path.join(datapath, file_name), 'rb')
         pcap = dpkt.pcap.Reader(f)
 
         for ts, buf in pcap:
@@ -73,13 +72,7 @@ while 1:
 
             print(data)
             print(vote)
-
-
-    except:
+    except Exception as exception:
         print("\n[error] Process break abnormally.")
-        print("Something wrong with Packet num-{0}, lost or error".format(i))
-        break
-
-    i += 1
-    if i > 10:
+        print(exception)
         break
