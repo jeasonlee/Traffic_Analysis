@@ -25,7 +25,7 @@ def calculate(a, b):
             continue
     return same_num/8
 
-datapath = './data_smtp/'
+datapath = './result/'
 file_name_list = os.listdir(datapath)
 for file_name in file_name_list:
     try:
