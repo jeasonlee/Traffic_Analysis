@@ -1,6 +1,5 @@
 import dpkt
 import os
-import collections
 import socket
 
 class flow:
@@ -45,10 +44,6 @@ if __name__ == '__main__':
                 # print(ip)
                 if ip.p == 6: # TCP
                     tcp = ip.data
-                    # print("-----------------------")
-                    # print(socket.inet_ntoa(ip.src))
-                    # print(socket.inet_ntoa(ip.dst))
-                    # print(sorted([socket.inet_ntoa(ip.src), socket.inet_ntoa(ip.dst)]))
                     new_flow = flow(ip.src, ip.dst, ip.tcp.sport, ip.tcp.dport)
                     if new_flow not in tcp_flow_dict:
                         tcp_flow_dict[new_flow] = [(ts, buf)]
