@@ -30,9 +30,8 @@ HANDSHAKE_TYPES = {
     20: 'Finished',
 }
 
-
-print(RECORD_TYPES.keys())
-print(TLS_VERSION.keys())
+# print(RECORD_TYPES.keys())
+# print(TLS_VERSION.keys())
 tls_path = 'D:/tls'
 file_name_list = os.listdir(tls_path)
 for file_name in file_name_list:
