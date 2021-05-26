@@ -1,5 +1,6 @@
 import dpkt
 import os
+import binascii
 
 # 第0字节
 RECORD_TYPES = {
@@ -10,10 +11,11 @@ RECORD_TYPES = {
 }
 # 第1、2字节
 TLS_VERSION = {
-    0x0300: "SSL3",
-    0x0301: "TLS 1.0",
-    0x0302: "TLS 1.1",
-    0x0303: "TLS 1.2"
+    '0300': "SSL3",
+    '0301': "TLS 1.0",
+    '0302': "TLS 1.1",
+    '0303': "TLS 1.2",
+    '0304': 'TLS 1.3'
 }
 # 第3、4字节为后续字节个数
 # 第5字节
@@ -30,8 +32,8 @@ HANDSHAKE_TYPES = {
     20: 'Finished',
 }
 
-# print(RECORD_TYPES.keys())
-# print(TLS_VERSION.keys())
+print(RECORD_TYPES.keys())
+print(TLS_VERSION.keys())
 tls_path = 'D:/tls'
 file_name_list = os.listdir(tls_path)
 for file_name in file_name_list:
@@ -51,24 +53,28 @@ for file_name in file_name_list:
             if len(data) != 0:
                 TLS_data.append(data)
                 print("num: {0} ".format(num), end='')
-                if data[0] == 22:
-                    # print(len(data))
-                    if data[5] == 1:
-                        print("Client Hello!")
-                    elif data[5] == 2:
-                        print("Server Hello!")
-                    elif data[5] == 4:
-                        print("New Session Ticket!")
-                    elif data[5] == 11:
-                        print("Certificate!")
-                    elif data[5] == 16:
-                        print("Client Key Exchange!")
-                elif data[0] == 23:
-                    print("Application Data!")
-                else:
-                    print("else")
+                if data[0] in RECORD_TYPES.keys():
+                    print(RECORD_TYPES.get(data[0]))
+                    if data[1:3].hex() in TLS_VERSION.keys():
+                        print(TLS_VERSION.get(data[1:3].hex()))
+                # if data[0] == 22:
+                #     # print(len(data))
+                #     if data[5] == 1:
+                #         print("Client Hello!")
+                #     elif data[5] == 2:
+                #         print("Server Hello!")
+                #     elif data[5] == 4:
+                #         print("New Session Ticket!")
+                #     elif data[5] == 11:
+                #         print("Certificate!")
+                #     elif data[5] == 16:
+                #         print("Client Key Exchange!")
+                # elif data[0] == 23:
+                #     print("Application Data!")
+                # else:
+                #     print("else")
 
     except Exception as e:
         print(e)
 
-    print(len(TLS_data))
+    # print(len(TLS_data))
