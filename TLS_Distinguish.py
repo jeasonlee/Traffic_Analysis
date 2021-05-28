@@ -1,7 +1,7 @@
 import dpkt
 import os
-import binascii
-
+import CumulativeSumsTest as CuST
+import NTruncatedEntropy as NTEn
 # 第0字节
 RECORD_TYPES = {
     0x14: "TLSChangeCipherSpec", # 20
@@ -32,8 +32,17 @@ HANDSHAKE_TYPES = {
     20: 'Finished',
 }
 
-print(RECORD_TYPES.keys())
-print(TLS_VERSION.keys())
+def TLS_Detection(data):
+    if data[0] in RECORD_TYPES.keys(): #data[0]字节ASCII编码
+        print(RECORD_TYPES.get(data[0]))
+        if data[1:3].hex() in TLS_VERSION.keys(): #data[1:3].hex()转换为十六进制字符串
+            # print(TLS_VERSION.get(data[1:3].hex()) + '/ ', end='')
+            # if data[5] in HANDSHAKE_TYPES.keys():
+            #     print(HANDSHAKE_TYPES.get(data[5]) + '/ ', end='')
+            return True
+    else:
+        return False
+
 tls_path = 'D:/tls'
 file_name_list = os.listdir(tls_path)
 for file_name in file_name_list:
@@ -52,29 +61,11 @@ for file_name in file_name_list:
             num = num + 1
             if len(data) != 0:
                 TLS_data.append(data)
-                print("num: {0} ".format(num), end='')
-                if data[0] in RECORD_TYPES.keys():
-                    print(RECORD_TYPES.get(data[0]))
-                    if data[1:3].hex() in TLS_VERSION.keys():
-                        print(TLS_VERSION.get(data[1:3].hex()))
-                # if data[0] == 22:
-                #     # print(len(data))
-                #     if data[5] == 1:
-                #         print("Client Hello!")
-                #     elif data[5] == 2:
-                #         print("Server Hello!")
-                #     elif data[5] == 4:
-                #         print("New Session Ticket!")
-                #     elif data[5] == 11:
-                #         print("Certificate!")
-                #     elif data[5] == 16:
-                #         print("Client Key Exchange!")
-                # elif data[0] == 23:
-                #     print("Application Data!")
-                # else:
-                #     print("else")
+                print("pktnum{0}: ".format(num), end='')
+                if TLS_Detection(data):
+                    CuST.cumulative_sums_test(data)
+            else:
+                print("pktnum{0}: TCP linkage no Application data".format(num))
 
     except Exception as e:
         print(e)
-
-    # print(len(TLS_data))
