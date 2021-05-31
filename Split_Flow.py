@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
             for ts, buf in pcap:
                 eth = dpkt.ethernet.Ethernet(buf)
-                if not isinstance(eth.data, dpkt.ip.IP) and not isinstance(eth.data, dpkt.ip6.IP6):  # 解包，网络层，判断网络层是否存在，兼容ipv6
+                if not isinstance(eth.data, dpkt.ip.IP) and not isinstance(eth.data, dpkt.ip6.IP6): # 解包，网络层，判断网络层是否存在，兼容ipv6
                     continue
                 ip = eth.data
                 trans_data = ip.data
