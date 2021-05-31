@@ -63,9 +63,12 @@ def cumulative_sums_test(bits):
     success = ((p_forward >= 0.01) and (p_backward >= 0.01))
     plist = [p_forward, p_backward]
 
+    print(success)
     if success:
         print("PASS")
+        print(plist)
     else:
+        print(plist)
         print("FAIL: Data not random")
 
     return (success, plist)
