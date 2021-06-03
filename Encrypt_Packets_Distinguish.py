@@ -52,12 +52,18 @@ def tls_applicationdata_test(data):
         return False
 
 def data_to_bitsequence(data):
+    try:
+        return ''.join(['{:08b}'.format(ord(byte)) for byte in data])
+    except:
+        try:
+            return ''.join(['{:08b}'.format(oct(byte)) for byte in data])
+        except:
+            return ''.join(['{:08b}'.format(byte) for byte in data])
     # for byte in data:
     #     print("{:08b}".format(byte))
-    bit_sequence = ''
-    bit_sequence = bit_sequence + ''.join(['{:08b}'.format(byte) for byte in data]) # 字节转换为二进制bit流
-    bit_sequence = [int(x) for x in list(bit_sequence)]
-    return bit_sequence
+    # bit_sequence = ''
+    # bit_sequence = bit_sequence + ''.join(['{:08b}'.format(byte) for byte in data]) # 字节转换为二进制bit流
+    # return bit_sequence
 
 tls_path = 'D:/tls'
 file_name_list = os.listdir(tls_path)
@@ -73,9 +79,9 @@ for file_name in file_name_list:
             num = num + 1
             eth = dpkt.ethernet.Ethernet(buf)
             ip = eth.data
+
             # print(ip.IP_DF)
             # print(ip.offset)
-
             # not_fragment = bool(ip.off & dpkt.ip.IP_DF)
             # more_fragments = bool(ip.off & dpkt.ip.IP_MF)
             # fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
@@ -88,11 +94,17 @@ for file_name in file_name_list:
             if len(data) != 0:
                 print("pktnum{0}: ".format(num), end='')
                 TLS_data.append(data)
-                if tls_applicationdata_test(data):
+                CuST_result, value = CuST.cumulative_sums_test(data_to_bitsequence(data))
+                if CuST_result:
                     print("True")
-                    print("Pass")
+                    print("PASS")
+                elif tls_applicationdata_test(data):
+                    print("True")
+                    print("PASS")
                 else:
-                    CuST.cumulative_sums_test(data_to_bitsequence(data))
+                    print("False")
+                    print("FAIL: Data not random")
+
             else:
                 print("pktnum{0}: TCP linkage no Application data".format(num))
 
