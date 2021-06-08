@@ -1,7 +1,7 @@
 import dpkt
 import os
 import CumulativeSumsTest as CuST
-import NTruncatedEntropy as NTEn
+import NTruncatedEntropyTest as NTEnT
 
 # 第0字节
 RECORD_TYPES = {
@@ -67,6 +67,7 @@ def data_to_bitsequence(data):
 
 tls_path = 'D:/tls'
 file_name_list = os.listdir(tls_path)
+[low, high] = NTEnT.generate_random_range()
 for file_name in file_name_list:
     TLS_data = []
     file_path = os.path.join(tls_path, file_name)
@@ -79,28 +80,20 @@ for file_name in file_name_list:
             num = num + 1
             eth = dpkt.ethernet.Ethernet(buf)
             ip = eth.data
-
-            # print(ip.IP_DF)
-            # print(ip.offset)
-            # not_fragment = bool(ip.off & dpkt.ip.IP_DF)
-            # more_fragments = bool(ip.off & dpkt.ip.IP_MF)
-            # fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
-            # print(not_fragment)
-            # print(more_fragments)
-            # print(fragment_offset)
-
             tcp = ip.data
             data = tcp.data
             if len(data) != 0:
                 print("pktnum{0}: ".format(num), end='')
                 TLS_data.append(data)
-                CuST_result, value = CuST.cumulative_sums_test(data_to_bitsequence(data))
-                if CuST_result:
+                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
+                NTEn_result, NTEnT_value = NTEnT.N_truncated_entropy_test(data, low, high)
+
+                if NTEn_result and CuST_result:
                     print("True")
                     print("PASS")
-                elif tls_applicationdata_test(data):
-                    print("True")
-                    print("PASS")
+                # elif tls_applicationdata_test(data):
+                #     print("True")
+                #     print("PASS")
                 else:
                     print("False")
                     print("FAIL: Data not random")
