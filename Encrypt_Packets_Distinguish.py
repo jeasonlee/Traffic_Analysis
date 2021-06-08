@@ -65,7 +65,7 @@ def data_to_bitsequence(data):
     # bit_sequence = bit_sequence + ''.join(['{:08b}'.format(byte) for byte in data]) # 字节转换为二进制bit流
     # return bit_sequence
 
-tls_path = 'D:/tls'
+tls_path = './data_tls'
 file_name_list = os.listdir(tls_path)
 [low, high] = NTEnT.generate_random_range()
 for file_name in file_name_list:
