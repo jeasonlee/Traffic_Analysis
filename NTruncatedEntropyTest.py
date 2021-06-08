@@ -101,13 +101,11 @@ def N_truncated_entropy_test(data, low, high):
     # print(entropy_list)
     u = np.mean(entropy_list)
     success = (u > low)
-    return (success, u)
     # if u > low:
     #     # print("True")
-    #     return (True, u)
     # else:
     #     # print("False")
-    #     return (False, u)
+    return (success, u)
 
 # if __name__ == "__main__":
 #     f = open('D:/tls/BA0-0007.pcap', 'rb')

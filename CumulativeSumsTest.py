@@ -1,5 +1,4 @@
 import math
-from UtilFunctions import *
 
 def normcdf(n):
     return 0.5 * math.erfc(-n * math.sqrt(0.5))
