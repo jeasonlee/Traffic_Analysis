@@ -3,7 +3,6 @@ import math
 from fractions import Fraction
 from UtilFunctions import *
 
-#ones_table = [bin(i)[2:].count('1') for i in range(256)]
 def count_ones_zeroes(bits):
     ones = 0
     zeroes = 0
@@ -27,15 +26,14 @@ def frequency_within_block_test(bits):
     
     if len(bits) < 100:
         print("Too little data for test. Supply at least 100 bits")
-        return False,1.0,None
+        return False, 1.0
     
     print("  n = %d" % len(bits))
     print("  N = %d" % N)
     print("  M = %d" % M)
     
     num_of_blocks = N
-    block_size = M #int(math.floor(len(bits)/num_of_blocks))
-    #n = int(block_size * num_of_blocks)
+    block_size = M
     
     proportions = list()
     for i in range(num_of_blocks):
@@ -49,6 +47,4 @@ def frequency_within_block_test(bits):
     
     p = gammaincc((num_of_blocks/2.0),float(chisq)/2.0)
     success = (p >= 0.01)
-    return (success,p,None)
-
-
+    return (success,p)
