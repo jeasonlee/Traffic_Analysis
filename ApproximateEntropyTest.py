@@ -1,5 +1,5 @@
+#!/usr/bin/env python
 import math
-import numpy as np
 from UtilFunctions import *
 
 def bits_to_int(bits):
@@ -9,6 +9,7 @@ def bits_to_int(bits):
     return int_result
         
 def approximate_entropy_test(bits):
+    bits = [int(x) for x in list(bits)]
     n = len(bits)
     
     m = int(math.floor(math.log(n, 2))) - 6
@@ -51,6 +52,7 @@ def approximate_entropy_test(bits):
     return (success, p)
 
 def fast_approximate_entropy_test(bits):
+    bits = [int(x) for x in list(bits)]
     n = len(bits)
     
     m = int(math.floor(math.log(n, 2))) - 6

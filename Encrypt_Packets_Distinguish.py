@@ -1,7 +1,10 @@
+#!/usr/bin/env python
 import dpkt
 import os
+import time
 import CumulativeSumsTest as CuST
-import NTruncatedEntropyTest as NTEnT
+import NTruncatedEntropyTest as NTEn
+import ApproximateEntropyTest as ApEn
 
 # 第0字节
 RECORD_TYPES = {
@@ -67,7 +70,8 @@ def data_to_bitsequence(data):
 
 tls_path = './data_tls'
 file_name_list = os.listdir(tls_path)
-[low, high] = NTEnT.generate_random_range()
+[low, high] = NTEn.generate_random_range()
+# start = time.time()
 for file_name in file_name_list:
     TLS_data = []
     file_path = os.path.join(tls_path, file_name)
@@ -86,17 +90,33 @@ for file_name in file_name_list:
                 print("pktnum{0}: ".format(num), end='')
                 TLS_data.append(data)
                 CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
-                NTEn_result, NTEnT_value = NTEnT.N_truncated_entropy_test(data, low, high)
+                NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high)
+                ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))
 
-                if NTEn_result and CuST_result:
-                    print("True")
-                    print("PASS")
-                # elif tls_applicationdata_test(data):
+                if NTEn_result:
+                    print("NTEn: True pass.")
+                else:
+                    print("NTEn: False.")
+
+                if CuST_result:
+                    print("CuST: True pass.")
+                else:
+                    print("CuST: False.")
+
+                if ApEn_result:
+                    print("ApEn: True pass.")
+                else:
+                    print("ApEn: False.")
+
+                # if NTEnT_result and CuST_result:
                 #     print("True")
                 #     print("PASS")
-                else:
-                    print("False")
-                    print("FAIL: Data not random")
+                # # elif tls_applicationdata_test(data):
+                # #     print("True")
+                # #     print("PASS")
+                # else:
+                #     print("False")
+                #     print("FAIL: Data not random")
 
             else:
                 print("pktnum{0}: TCP linkage no Application data".format(num))

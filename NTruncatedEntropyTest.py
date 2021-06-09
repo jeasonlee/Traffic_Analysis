@@ -1,6 +1,7 @@
-import numpy as np
+#!/usr/bin/env python
 import sympy
 import random
+import numpy as np
 from collections import Counter
 
 # def encode(s):

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import dpkt
 import os
 import socket

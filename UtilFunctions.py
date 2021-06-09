@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from math import gamma,e
 
 def upper_incomplete_gamma(a,x,d=0,iterations=100):
