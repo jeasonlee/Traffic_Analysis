@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import math
 
+# 0,1比特频数
 def count_ones_zeroes(bits):
     ones = 0
     zeroes = 0
@@ -11,7 +12,7 @@ def count_ones_zeroes(bits):
             zeroes += 1
     return (zeroes, ones)
 
-def monobit_test(bits):
+def monobit_frequency_test(bits):
     bits = [int(x) for x in list(bits)]
     n = len(bits)
 
