@@ -19,7 +19,7 @@ def runs_test(bits):
     zeroes, ones = count_ones_zeroes(bits)
 
     prop = float(ones) / float(n)
-    print("  prop ", prop)
+    # print("  prop ", prop)
 
     tau = 2.0 / math.sqrt(n)
     # print("  tau ", tau)

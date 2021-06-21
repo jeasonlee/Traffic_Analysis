@@ -14,6 +14,7 @@ import MonobitFrequencyTest as MbT
 import LongestRunOnesinaBlockTest as LROBT
 import DiscreteFourierTransformTest as DFTT
 import SerialTest as ST
+import RunsTest as RT
 
 # 第0字节
 RECORD_TYPES = {
@@ -110,6 +111,7 @@ for file_name in file_name_list:
                 LROBT_result, LROBT_value = LROBT.longest_run_ones_in_a_block_test(data_to_bitsequence(data))
                 DFTT_result, DFTT_value = DFTT.discrete_fourier_transform_test(data_to_bitsequence(data))
                 ST_result, ST_value = ST.serial_test(data_to_bitsequence(data))
+                RT_result, RT_value = RT.runs_test(data_to_bitsequence(data))
 
 
                 if NTEn_result:
@@ -151,6 +153,11 @@ for file_name in file_name_list:
                     print("ST: True pass.")
                 else:
                     print("ST: False.")
+
+                if RT_result:
+                    print("RT: True pass.")
+                else:
+                    print("RT: False.")
 
 
                 # if NTEnT_result and CuST_result:
