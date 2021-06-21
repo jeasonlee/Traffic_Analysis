@@ -83,17 +83,17 @@ if __name__ == '__main__':
                                                                                        socket.inet_ntop(socket.AF_INET6, key.dst_ip),
                                                                                        key.src_port, key.dst_port, len(value)))
 
-    result_path = os.path.join('', "quic1")
+    result_path = os.path.join('', "quic")
     if not os.path.exists(result_path):
         os.mkdir(result_path)
 
-    for i, value in zip(range(len(tcp_flow_dict.values())), tcp_flow_dict.values()):
-        flow_new = open(os.path.join(result_path, str(i) + "_tcp.pcap"), 'wb')
-        writer = dpkt.pcap.Writer(flow_new)
-        value.sort(key = lambda x:x[0], reverse=False)
-        for pkt in value:
-            writer.writepkt(pkt = pkt[1], ts = pkt[0])
-        flow_new.close()
+    # for i, value in zip(range(len(tcp_flow_dict.values())), tcp_flow_dict.values()):
+    #     flow_new = open(os.path.join(result_path, str(i) + "_tcp.pcap"), 'wb')
+    #     writer = dpkt.pcap.Writer(flow_new)
+    #     value.sort(key = lambda x:x[0], reverse=False)
+    #     for pkt in value:
+    #         writer.writepkt(pkt = pkt[1], ts = pkt[0])
+    #     flow_new.close()
 
     for i, value in zip(range(len(udp_flow_dict.values())), udp_flow_dict.values()):
         flow_new = open(os.path.join(result_path, str(i) + "_udp.pcap"), 'wb')

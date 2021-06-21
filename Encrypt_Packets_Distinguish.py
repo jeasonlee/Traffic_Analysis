@@ -5,6 +5,7 @@ import time
 import CumulativeSumsTest as CuST
 import NTruncatedEntropyTest as NTEn
 import ApproximateEntropyTest as ApEn
+import FrequencyWithinBlockTest as FrWB
 
 # 第0字节
 RECORD_TYPES = {
@@ -38,11 +39,11 @@ HANDSHAKE_TYPES = {
 
 def tls_detection(data):
     if data[0] in RECORD_TYPES.keys(): #data[0]字节ASCII编码
-        print(RECORD_TYPES.get(data[0]))
+        print(RECORD_TYPES.get(data[0]) + '/ ', end='')
         if data[1:3].hex() in TLS_VERSION.keys(): #data[1:3].hex()转换为十六进制字符串
-            # print(TLS_VERSION.get(data[1:3].hex()) + '/ ', end='')
-            # if data[5] in HANDSHAKE_TYPES.keys():
-            #     print(HANDSHAKE_TYPES.get(data[5]) + '/ ', end='')
+            print(TLS_VERSION.get(data[1:3].hex()) + '/ ', end='')
+            if data[5] in HANDSHAKE_TYPES.keys() and data[0] != 23:
+                print(HANDSHAKE_TYPES.get(data[5]) + '/ ', end='')
             return True
     else:
         return False
@@ -68,7 +69,7 @@ def data_to_bitsequence(data):
     # bit_sequence = bit_sequence + ''.join(['{:08b}'.format(byte) for byte in data]) # 字节转换为二进制bit流
     # return bit_sequence
 
-tls_path = './data_tls'
+tls_path = './data_tls1.2'
 file_name_list = os.listdir(tls_path)
 [low, high] = NTEn.generate_random_range()
 # start = time.time()
@@ -88,15 +89,18 @@ for file_name in file_name_list:
             data = tcp.data
             if len(data) != 0:
                 print("pktnum{0}: ".format(num), end='')
+                tls_detection(data)
                 TLS_data.append(data)
-                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
                 NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high)
+                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
                 ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))
+                FrWB_result, FrWB_value = FrWB.frequency_within_block_test(data_to_bitsequence(data))
+
 
                 if NTEn_result:
-                    print("NTEn: True pass.")
+                    print("\nNTEn: True pass.")
                 else:
-                    print("NTEn: False.")
+                    print("\nNTEn: False.")
 
                 if CuST_result:
                     print("CuST: True pass.")
@@ -107,6 +111,11 @@ for file_name in file_name_list:
                     print("ApEn: True pass.")
                 else:
                     print("ApEn: False.")
+
+                if FrWB_result:
+                    print("FrWB: True pass.")
+                else:
+                    print("FrWB: False.")
 
                 # if NTEnT_result and CuST_result:
                 #     print("True")

@@ -53,7 +53,7 @@ def generate_random_range(len = 32):
     N = 8 # 一字节八位bit
     entr_arr = []
     random.seed()
-    for n in range(0, 100000): # 生成100000个随机序列
+    for n in range(0, 50000): # 生成100000个随机序列
         random_str = ''
         for i in range(len * N): # 32字节，32*8位bit
             random_str += str(random.randint(0, 1))
