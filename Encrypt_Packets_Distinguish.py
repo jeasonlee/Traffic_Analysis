@@ -6,6 +6,11 @@ import CumulativeSumsTest as CuST
 import NTruncatedEntropyTest as NTEn
 import ApproximateEntropyTest as ApEn
 import FrequencyWithinBlockTest as FrWB
+# import LinearComplexityTest as LiCT
+# import BinaryMatrixRankTest as BMRT
+# import RandomExcursionVariantTest as REVT
+# import OverlappingTemplateMatchingTest as OTMT
+import MonobitTest as MbT
 
 # 第0字节
 RECORD_TYPES = {
@@ -71,7 +76,7 @@ def data_to_bitsequence(data):
 
 tls_path = './data_tls1.2'
 file_name_list = os.listdir(tls_path)
-[low, high] = NTEn.generate_random_range()
+# [low, high] = NTEn.generate_random_range()
 # start = time.time()
 for file_name in file_name_list:
     TLS_data = []
@@ -91,31 +96,40 @@ for file_name in file_name_list:
                 print("pktnum{0}: ".format(num), end='')
                 tls_detection(data)
                 TLS_data.append(data)
-                NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high)
-                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
-                ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))
-                FrWB_result, FrWB_value = FrWB.frequency_within_block_test(data_to_bitsequence(data))
+                # NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high)
+                # CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
+                # ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))
+                # FrWB_result, FrWB_value = FrWB.frequency_within_block_test(data_to_bitsequence(data))
+                # LiCT_result, LiCT_value = LiCT.linear_complexity_test(data_to_bitsequence(data))
+                # REVT_result, REVT_value = REVT.random_excursion_variant_test(data_to_bitsequence(data))
+                # OTMT_result, OTMT_value = OTMT.overlapping_template_matching_test(data_to_bitsequence(data))
+                MbT_result, MbT_value = MbT.monobit_test(data_to_bitsequence(data))
 
 
-                if NTEn_result:
-                    print("\nNTEn: True pass.")
+                # if NTEn_result:
+                #     print("\nNTEn: True pass.")
+                # else:
+                #     print("\nNTEn: False.")
+                #
+                # if CuST_result:
+                #     print("CuST: True pass.")
+                # else:
+                #     print("CuST: False.")
+                #
+                # if ApEn_result:
+                #     print("ApEn: True pass.")
+                # else:
+                #     print("ApEn: False.")
+                #
+                # if FrWB_result:
+                #     print("FrWB: True pass.")
+                # else:
+                #     print("FrWB: False.")
+                #
+                if MbT_result:
+                    print("MbT: True pass.")
                 else:
-                    print("\nNTEn: False.")
-
-                if CuST_result:
-                    print("CuST: True pass.")
-                else:
-                    print("CuST: False.")
-
-                if ApEn_result:
-                    print("ApEn: True pass.")
-                else:
-                    print("ApEn: False.")
-
-                if FrWB_result:
-                    print("FrWB: True pass.")
-                else:
-                    print("FrWB: False.")
+                    print("MbT: False.")
 
                 # if NTEnT_result and CuST_result:
                 #     print("True")

@@ -2,6 +2,7 @@
 import math
 from UtilFunctions import *
 
+# flow based, number of bit requires more than the standard length
 def berelekamp_massey(bits):
     n = len(bits)
     b = [0 for x in bits]  # initialize b and c arrays
@@ -40,7 +41,7 @@ def linear_complexity_test(bits, patternlen=None):
         if n < 1000000:
             print("Error. Need at least 10^6 bits")
             # exit()
-            return False, 0.0, None
+            return False, 0.0
         M = 512
     K = 6
     N = int(math.floor(n / M))
@@ -93,7 +94,7 @@ def linear_complexity_test(bits, patternlen=None):
     P = gammaincc((K / 2.0), (chisq / 2.0))
     print("  P = ", P)
     success = (P >= 0.01)
-    return (success, P, None)
+    return (success, P)
 
 # if __name__ == "__main__":
 #     bits = [1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1]
