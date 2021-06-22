@@ -2,6 +2,7 @@
 import dpkt
 import os
 import time
+import collections
 import CumulativeSumsTest as CuST
 import NTruncatedEntropyTest as NTEn
 import ApproximateEntropyTest as ApEn
@@ -15,6 +16,7 @@ import LongestRunOnesinaBlockTest as LROBT
 import DiscreteFourierTransformTest as DFTT
 import SerialTest as ST
 import RunsTest as RT
+
 
 # 第0字节
 RECORD_TYPES = {
@@ -91,6 +93,7 @@ for file_name in file_name_list:
         pcap = dpkt.pcap.Reader(f)
         num = 0
         for ts, buf in pcap:
+            result_list = []
             num = num + 1
             eth = dpkt.ethernet.Ethernet(buf)
             ip = eth.data
@@ -100,64 +103,61 @@ for file_name in file_name_list:
                 print("pktnum{0}: ".format(num), end='')
                 tls_detection(data)
                 TLS_data.append(data)
-                NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high)
-                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data))
-                ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))
-                FrWB_result, FrWB_value = FrWB.frequency_within_block_test(data_to_bitsequence(data))
+                NTEn_result, NTEn_value = NTEn.N_truncated_entropy_test(data, low, high) # N截断熵
+                CuST_result, CuST_value = CuST.cumulative_sums_test(data_to_bitsequence(data)) # 累加和
+                ApEn_result, ApEn_value = ApEn.fast_approximate_entropy_test(data_to_bitsequence(data))  # 近似熵
+
+                FrWB_result, FrWB_value = FrWB.frequency_within_block_test(data_to_bitsequence(data)) # 分块比特频数
+                MbT_result, MbT_value = MbT.monobit_frequency_test(data_to_bitsequence(data))  # 单比特频数
+                RT_result, RT_value = RT.runs_test(data_to_bitsequence(data))  # 游程
+                LROBT_result, LROBT_value = LROBT.longest_run_ones_in_a_block_test(data_to_bitsequence(data))  # 最大游程
                 # LiCT_result, LiCT_value = LiCT.linear_complexity_test(data_to_bitsequence(data))
                 # REVT_result, REVT_value = REVT.random_excursion_variant_test(data_to_bitsequence(data))
                 # OTMT_result, OTMT_value = OTMT.overlapping_template_matching_test(data_to_bitsequence(data))
-                MbT_result, MbT_value = MbT.monobit_frequency_test(data_to_bitsequence(data))
-                LROBT_result, LROBT_value = LROBT.longest_run_ones_in_a_block_test(data_to_bitsequence(data))
-                DFTT_result, DFTT_value = DFTT.discrete_fourier_transform_test(data_to_bitsequence(data))
-                ST_result, ST_value = ST.serial_test(data_to_bitsequence(data))
-                RT_result, RT_value = RT.runs_test(data_to_bitsequence(data))
+
+                DFTT_result, DFTT_value = DFTT.discrete_fourier_transform_test(data_to_bitsequence(data)) # 傅里叶变换
+                ST_result, ST_value = ST.serial_test(data_to_bitsequence(data)) # 序列化
+
+                result_list = [NTEn_result, CuST_result, ApEn_result, FrWB_result|MbT_result,
+                               RT_result|LROBT_result, DFTT_result, ST_result]
+                print(collections.Counter(result_list).most_common(1)[0][0])
+
+                # if NTEn_result:
+                #     print("\nNTEn: True pass.")
+                # else:
+                #     print("\nNTEn: False.")
+                #
+                # if CuST_result:
+                #     print("CuST: True pass.")
+                # else:
+                #     print("CuST: False.")
+                #
+                # if ApEn_result:
+                #     print("ApEn: True pass.")
+                # else:
+                #     print("ApEn: False.")
+
+                # if FrWB_result or MbT_result:
+                #     print("FrWB: True pass.")
+                # else:
+                #     print("FrWB: False.")
+                #
+                # if RT_result or LROBT_result:
+                #     print("RT: True pass.")
+                # else:
+                #     print("RT: False.")
+
+                # if DFTT_result:
+                #     print("DFTT: True pass.")
+                # else:
+                #     print("DFTT: False.")
+                #
+                # if ST_result:
+                #     print("ST: True pass.")
+                # else:
+                #     print("ST: False.")
 
 
-                if NTEn_result:
-                    print("\nNTEn: True pass.")
-                else:
-                    print("\nNTEn: False.")
-
-                if CuST_result:
-                    print("CuST: True pass.")
-                else:
-                    print("CuST: False.")
-
-                if ApEn_result:
-                    print("ApEn: True pass.")
-                else:
-                    print("ApEn: False.")
-
-                if FrWB_result:
-                    print("FrWB: True pass.")
-                else:
-                    print("FrWB: False.")
-
-                if MbT_result:
-                    print("MbT: True pass.")
-                else:
-                    print("MbT: False.")
-
-                if LROBT_result:
-                    print("LROBT: True pass.")
-                else:
-                    print("LROBT: False.")
-
-                if DFTT_result:
-                    print("DFTT: True pass.")
-                else:
-                    print("DFTT: False.")
-
-                if ST_result:
-                    print("ST: True pass.")
-                else:
-                    print("ST: False.")
-
-                if RT_result:
-                    print("RT: True pass.")
-                else:
-                    print("RT: False.")
 
 
                 # if NTEnT_result and CuST_result:
